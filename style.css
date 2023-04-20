@@ -100,6 +100,14 @@ img {
     display: flex;
     flex-direction: column;
     gap: 1rem;   
+    contain: content;
+}
+
+@media (min-width: 45em) {
+    .accordion {
+        flex-direction: row;
+        height: 30rem;
+    }
 }
 
 .accordion * {
@@ -111,14 +119,14 @@ img {
     isolation: isolate;
     flex-basis: calc((var(--_panel-padding) * 2) + var(--_button-size));
     overflow: hidden;
-    padding: var(--_button-size);
+    padding: .75rem;
     padding-right: calc(var(--_panel-padding) * 4);
     border-radius: calc(((var(--_panel-padding) * 2) + var(--_button-size)) / 2);
 }
 
 @media (prefers-reduced-motion: no-preference) {
     .accordion-panel {
-        transition: flex-basis 500ms;
+        transition: flex-basis 500ms, flex-grow 500ms;
     }
 }
 
@@ -140,7 +148,18 @@ img {
 
 .accordion-panel:has([aria-expanded="true"]) {
     flex-basis: clamp(15rem, 40vh, 20rem);
+    flex-grow: 1;
 }
+
+.accordion-trigger {
+    outline: 0;
+}
+
+.accordion-panel:focus-within {
+    outline: 3px solid var(--_panel-color);
+    outline-offset: 4px;
+}
+
 
 .accordion-content > p {
     transform: translateY(2rem);
@@ -149,21 +168,37 @@ img {
     margin-left: calc(var(--_button-size) + var(--_panel-gap));
 }
 
-/*@media (prefers-reduced-motion: no-preference) {
-    .accordion-panel > p {
-        transition: transform 500ms 250ms, opacity 500ms 250ms;
+@media (prefers-reduced-motion: no-preference) {
+    .accordion-panel:has([aria-expanded="true"]) p{
+        transition: transform 500ms 500ms, opacity 500ms 500ms;
     }
-}*/
+}
 
 .accordion-panel:has([aria-expanded="true"]) p {
     transform: translateY(0);
     opacity: 1;
-    transition: transform 500ms 250ms, opacity 500ms 250ms;
 }
 
 .accordion-title {
     font-size: 1.75rem;
     font-weight: 700;
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-items: center;
+}
+
+@media (max-width: 44.999em) {
+    .accordion-title::after {
+        content: "";
+        position: absolute;
+        left: calc((var(--_button-size) + var(--_panel-gap)) * -1);;
+        width: calc(100% + (var(--_button-size) * 2));
+        height: var(--_button-size);
+        background: hsl(0 0% 0% / .5);
+        z-index: -1;
+        border-radius: 100vw;
+    }
 }
 
 .accordion-image {
@@ -201,6 +236,7 @@ img {
     align-items: center;
     aspect-ratio: 1 / 1;
     border-radius: 50%;
+    z-index: 100;
 }
 
 
